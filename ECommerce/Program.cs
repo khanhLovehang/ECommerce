@@ -1,6 +1,8 @@
+using ECommerce.ContextFactory;
 using ECommerce.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
+using Repository;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +17,17 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureLoggerService();
+builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureServiceManager();
+builder.Services.ConfigureSqlContext(builder.Configuration);
 
 builder.Services.AddControllers();
 
+
+
 //
-//builder.Services.AddDbContext<EcommerceContext>();
+//builder.Services.AddDbContext<RepositoryContext>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

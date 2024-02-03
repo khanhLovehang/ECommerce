@@ -1,5 +1,9 @@
 ﻿using Contracts;
 using LoggerService;
+using Microsoft.EntityFrameworkCore;
+using Repository;
+using Service;
+using Service.Contracts;
 
 namespace ECommerce.Extensions
 {
@@ -22,7 +26,21 @@ namespace ECommerce.Extensions
          });
 
         //Add the logger service inside the .NET Core’s IOC container.
-        public static void ConfigureLoggerService(this IServiceCollection services) => services.AddSingleton<ILoggerManager, LoggerManager>();
+        public static void ConfigureLoggerService(this IServiceCollection services) =>
+            services.AddSingleton<ILoggerManager, LoggerManager>();
+
+        //Register repositorymanager class
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+        //
+        public static void ConfigureServiceManager(this IServiceCollection services) =>
+            services.AddScoped<IServiceManager, ServiceManager>();
+
+        //Register RepositoryContext
+        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) 
+            => services.AddDbContext<RepositoryContext>(opts => 
+                     opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
     }
 
 
