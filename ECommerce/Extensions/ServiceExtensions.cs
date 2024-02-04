@@ -1,9 +1,12 @@
 ﻿using Contracts;
+using Entities.ErrorModel;
 using LoggerService;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Service;
 using Service.Contracts;
+using System.Net;
 
 namespace ECommerce.Extensions
 {
@@ -38,9 +41,31 @@ namespace ECommerce.Extensions
             services.AddScoped<IServiceManager, ServiceManager>();
 
         //Register RepositoryContext
-        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) 
-            => services.AddDbContext<RepositoryContext>(opts => 
+        public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
+            => services.AddDbContext<RepositoryContext>(opts =>
                      opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+
+        public static void ConfigureExceptionHandler(this WebApplication app, ILoggerManager logger)
+        {
+            app.UseExceptionHandler(appError =>
+            {
+                appError.Run(async context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (contextFeature != null)
+                    {
+                        logger.LogError($"Something went wrong: {contextFeature.Error}");
+                        await context.Response.WriteAsync(new ErrorDetails()
+                        {
+                            StatusCode = context.Response.StatusCode,
+                            Message = "Internal Server Error.",
+                        }.ToString());
+                    }
+                });
+            });
+        }
     }
 
 

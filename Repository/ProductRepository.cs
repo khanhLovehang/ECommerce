@@ -11,8 +11,15 @@ namespace Repository
 {
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
-        public ProductRepository(RepositoryContext repositoryContext) : base(repositoryContext) 
+        public ProductRepository(RepositoryContext repositoryContext) 
+            : base(repositoryContext) 
         { 
+        }
+
+
+        public IEnumerable<Product> GetAllProducts(bool trackChanges)
+        {
+            return FindAll(trackChanges).OrderBy(i => i.CreatedDate).ToList();
         }
 
     }

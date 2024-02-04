@@ -1,3 +1,4 @@
+using Contracts;
 using ECommerce.ContextFactory;
 using ECommerce.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -36,6 +37,12 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+var logger = app.Services.GetRequiredService<ILoggerManager>();
+app.ConfigureExceptionHandler(logger);
+
+if (app.Environment.IsProduction())
+    app.UseHsts();
+
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
@@ -48,10 +55,6 @@ if (app.Environment.IsDevelopment())
     //app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
-}
-else
-{
-    app.UseHsts();
 }
 
 app.UseHttpsRedirection();

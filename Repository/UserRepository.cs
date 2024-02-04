@@ -19,7 +19,7 @@ namespace Repository
         #region methods
         public IEnumerable<User> GetAllUsers(bool trackChanges)
         {
-            return FindAll(trackChanges).OrderBy(u => u.UserName).ToList();
+            return FindAll(trackChanges).OrderBy(i => i.UserName).ToList();
         }
         #endregion
 

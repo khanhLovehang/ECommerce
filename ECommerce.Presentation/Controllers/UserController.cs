@@ -17,15 +17,8 @@ namespace ECommerce.Presentation.Controllers
         [HttpGet]
         public IActionResult GetAllUsers()
         {
-            try
-            {
-                var users = _service.UserService.GetAllUsers(trackChanges: false);
-                return Ok(users);
-            }
-            catch 
-            {
-                return StatusCode(500, "Internal server error");
-            }
+            var users = _service.UserService.GetAllUsers(trackChanges: false);
+            return Ok(users);
         }
     }
 }

@@ -21,18 +21,10 @@ namespace Service
 
         public IEnumerable<UserDto> GetAllUsers(bool trackChanges)
         {
-            try
-            {
-                var users = _repository.User.GetAllUsers(trackChanges);
-                //var usersDto = users.Select(u => new UserDto(u.UserId, u.UserName ?? "", u.Email ?? "")).ToList();
-                var usersDto = _mapper.Map<IEnumerable<UserDto>>(users); // User auto mapper
-                return usersDto;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong in the {nameof(GetAllUsers)} service method {ex}");
-                throw;
-            }
+            var users = _repository.User.GetAllUsers(trackChanges);
+            //var usersDto = users.Select(u => new UserDto(u.UserId, u.UserName ?? "", u.Email ?? "")).ToList();
+            var usersDto = _mapper.Map<IEnumerable<UserDto>>(users); // Use auto mapper
+            return usersDto;
         }
 
     }

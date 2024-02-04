@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Contracts;
+using Entities;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 
 namespace Service
 {
@@ -15,6 +17,23 @@ namespace Service
             _repository = repository;
             _logger = logger;
             _mapper = mapper;
+        }
+
+
+        public IEnumerable<Product> GetAllProducts(bool trackChanges)
+        {
+            try
+            {
+                var products = _repository.Product.GetAllProducts(trackChanges).ToList();
+                //var usersDto = users.Select(u => new UserDto(u.UserId, u.UserName ?? "", u.Email ?? "")).ToList();
+                //var usersDto = _mapper.Map<IEnumerable<Product>>(products); // User auto mapper
+                return products;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong in the {nameof(GetAllProducts)} service method {ex}");
+                throw;
+            }
         }
 
     }
