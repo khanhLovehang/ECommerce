@@ -10,10 +10,17 @@ namespace Repository
         #endregion
 
         #region constructor
-        public UserRepository(RepositoryContext repositoryContext) : base(repositoryContext) { }
+        public UserRepository(RepositoryContext repositoryContext)
+            : base(repositoryContext)
+        {
+        }
         #endregion
 
         #region methods
+        public IEnumerable<User> GetAllUsers(bool trackChanges)
+        {
+            return FindAll(trackChanges).OrderBy(u => u.UserName).ToList();
+        }
         #endregion
 
     }

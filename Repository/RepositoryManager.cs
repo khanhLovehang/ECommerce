@@ -25,7 +25,6 @@ namespace Repository
         public IUserRepository User => _userRepository.Value;
         public IProductRepository Product => _productRepository.Value;
         public void Save() => _repositoryContext.SaveChanges();
-
         #endregion
 
     }
