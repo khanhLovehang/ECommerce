@@ -16,6 +16,9 @@ namespace ECommerce
             //opt => opt.MapFrom(x => string.Join(' ', x.Address, x.Country)));
 
             CreateMap<User, UserDto>();
+            CreateMap<Product, ProductDto>();
+            CreateMap<ProductForCreationDto, Product>();
+
         }
     }
 }

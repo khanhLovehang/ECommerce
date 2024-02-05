@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities;
+using Entities.Exceptions;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -25,6 +25,17 @@ namespace Service
             //var usersDto = users.Select(u => new UserDto(u.UserId, u.UserName ?? "", u.Email ?? "")).ToList();
             var usersDto = _mapper.Map<IEnumerable<UserDto>>(users); // Use auto mapper
             return usersDto;
+        }
+
+        public UserDto GetUser(Guid userId, bool trackChanges)
+        {
+            var user = _repository.User.GetUser(userId, trackChanges);
+
+            if (user is null)
+                throw new UserNotFoundException(userId);
+
+            var userDto = _mapper.Map<UserDto>(user); // Use auto mapper
+            return userDto;
         }
 
     }

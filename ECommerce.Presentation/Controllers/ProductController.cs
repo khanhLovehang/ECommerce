@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
+using Shared.DataTransferObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,20 +26,30 @@ namespace ECommerce.Presentation.Controllers
 
         #region methods
 
-        //[HttpGet]
-        //public IActionResult GetAllProducts()
-        //{
-        //    try
-        //    {
-        //        var products = _service.ProductService.GetAllProducts(trackChanges: false);
-        //        return products;
-        //    }
-        //    catch 
-        //    {
+        [HttpGet]
+        public IActionResult GetAllProducts()
+        {
+            var products = _service.ProductService.GetAllProducts(trackChanges: false);
+            return Ok(products);
+        }
 
-        //        return StatusCode(500, "Internal server error");
-        //    }
-        //}
+        [HttpGet("{id:guid}", Name = "ProductById")]
+        public IActionResult GetAllProducts(Guid id)
+        {
+            var product = _service.ProductService.GetProduct(id, trackChanges: false);
+            return Ok(product);
+        }
+
+        [HttpPost]
+        public IActionResult CreateProduct([FromBody] ProductForCreationDto product)
+        {
+            if (product is null)
+                return BadRequest("ProductForCreationDto object is null");
+
+            var createdProduct = _service.ProductService.CreateProduct(product);
+
+            return CreatedAtRoute("ProductById", new {id = createdProduct.ProductId }, createdProduct);
+        }
         #endregion
 
     }

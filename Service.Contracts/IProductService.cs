@@ -1,11 +1,13 @@
-﻿using Entities;
-using Shared.DataTransferObjects;
+﻿using Shared.DataTransferObjects;
 
 
 namespace Service.Contracts
 {
     public interface IProductService
     {
-        IEnumerable<Product> GetAllProducts(bool trackChanges);
+        IEnumerable<ProductDto> GetAllProducts(bool trackChanges);
+        ProductDto GetProduct(Guid productId, bool trackChanges);
+        ProductDto CreateProduct(ProductForCreationDto company);
+
     }
 }

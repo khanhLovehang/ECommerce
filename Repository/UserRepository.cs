@@ -21,6 +21,11 @@ namespace Repository
         {
             return FindAll(trackChanges).OrderBy(i => i.UserName).ToList();
         }
+
+        public User? GetUser(Guid userId, bool trackChanges)
+        {
+            return FindByCondition(i => i.UserId.Equals(userId), trackChanges).SingleOrDefault();
+        }
         #endregion
 
     }

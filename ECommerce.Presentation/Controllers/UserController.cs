@@ -20,5 +20,12 @@ namespace ECommerce.Presentation.Controllers
             var users = _service.UserService.GetAllUsers(trackChanges: false);
             return Ok(users);
         }
+
+        [HttpGet("{id:guid}")]
+        public IActionResult GetUser(Guid id)
+        {
+            var users = _service.UserService.GetUser(id, trackChanges: false);
+            return Ok(users);
+        }
     }
 }
