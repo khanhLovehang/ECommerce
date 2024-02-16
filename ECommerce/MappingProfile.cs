@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Entities;
+using Entities.Models;
 using Shared.DataTransferObjects;
 using System.Reflection.Metadata;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;

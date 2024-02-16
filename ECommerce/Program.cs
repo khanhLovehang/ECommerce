@@ -2,6 +2,7 @@ using Contracts;
 using ECommerce.ContextFactory;
 using ECommerce.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 using NLog;
 using Repository;
 
@@ -22,6 +23,10 @@ builder.Services.ConfigureRepositoryManager(); // Domain
 builder.Services.ConfigureServiceManager(); // Service
 builder.Services.ConfigureSqlContext(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Services.AddControllers(config =>
 {

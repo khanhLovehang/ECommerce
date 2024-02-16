@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shared.RequestFeatures;
 
 namespace ECommerce.Presentation.Controllers
 {
@@ -26,30 +22,55 @@ namespace ECommerce.Presentation.Controllers
 
         #region methods
 
+        /// <summary>
+        /// Lấy tất cả sản phẩm
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public IActionResult GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] ProductParameters productParameters)
         {
-            var products = _service.ProductService.GetAllProducts(trackChanges: false);
+            var products = await _service.ProductService.GetAllProductsAsync(productParameters, trackChanges: false);
+
             return Ok(products);
         }
 
+        /// <summary>
+        /// Lấy chi tiết sản phẩm
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id:guid}", Name = "ProductById")]
-        public IActionResult GetAllProducts(Guid id)
+        public async Task<IActionResult> GetProduct(Guid id)
         {
-            var product = _service.ProductService.GetProduct(id, trackChanges: false);
+            var product = await _service.ProductService.GetProductAsync(id, trackChanges: false);
+
             return Ok(product);
         }
 
+        /// <summary>
+        /// Thêm sản phẩm
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
         [HttpPost]
-        public IActionResult CreateProduct([FromBody] ProductForCreationDto product)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductForCreationDto product)
         {
             if (product is null)
                 return BadRequest("ProductForCreationDto object is null");
 
-            var createdProduct = _service.ProductService.CreateProduct(product);
+            if (ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
 
-            return CreatedAtRoute("ProductById", new {id = createdProduct.ProductId }, createdProduct);
+            ModelState.ClearValidationState(nameof(ProductForCreationDto));
+            if (!TryValidateModel(product, nameof(ProductForCreationDto)))
+                return UnprocessableEntity(ModelState);
+
+            var createdProduct = await _service.ProductService.CreateProductAsync(product);
+
+            return CreatedAtRoute("ProductById", new { id = createdProduct.ProductId }, createdProduct);
         }
+
+
         #endregion
 
     }

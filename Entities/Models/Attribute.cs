@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Entities;
+namespace Entities.Models;
 
 public partial class Attribute
 {
@@ -33,8 +33,6 @@ public partial class Attribute
     public string? DeletedBy { get; set; }
 
     public Guid? DeletedById { get; set; }
-
-    public int? ParentId { get; set; }
 
     public virtual ICollection<AttributeValue> AttributeValues { get; set; } = new List<AttributeValue>();
 }

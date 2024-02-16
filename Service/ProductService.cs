@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Contracts;
-using Entities;
+using Entities.Models;
 using Entities.Exceptions;
 using Service.Contracts;
 using Shared.DataTransferObjects;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -27,16 +27,29 @@ namespace Service
         #endregion
 
         #region methods
-        public IEnumerable<ProductDto> GetAllProducts(bool trackChanges)
+
+        /// <summary>
+        /// Lấy all sản phẩm
+        /// </summary>
+        /// <param name="trackChanges"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductParameters productParameters, bool trackChanges)
         {
-            var products = _repository.Product.GetAllProducts(trackChanges);
+            var products = await _repository.Product.GetAllProducts(productParameters, trackChanges);
             var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products); // Use auto mapper
             return productsDto;
         }
 
-        public ProductDto GetProduct(Guid productId, bool trackChanges)
+        /// <summary>
+        /// Lấy chi tiết sản phẩm
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="trackChanges"></param>
+        /// <returns></returns>
+        /// <exception cref="ProductNotFoundException"></exception>
+        public async Task<ProductDto> GetProductAsync(Guid productId, bool trackChanges)
         {
-            var product = _repository.Product.GetProduct(productId, trackChanges);
+            var product = await _repository.Product.GetProduct(productId, trackChanges);
 
             if (product is null)
                 throw new ProductNotFoundException(productId);
@@ -45,12 +58,17 @@ namespace Service
             return productDto;
         }
 
-        public ProductDto CreateProduct(ProductForCreationDto product)
+        /// <summary>
+        /// Thêm sản phẩm
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        public async Task<ProductDto> CreateProductAsync(ProductForCreationDto product)
         {
             var productEntity = _mapper.Map<Product>(product);
 
             _repository.Product.CreateProduct(productEntity);
-            _repository.Save();
+            await _repository.SaveAsync();
 
             var productToReturn = _mapper.Map<ProductDto>(productEntity);
 

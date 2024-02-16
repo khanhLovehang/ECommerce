@@ -1,12 +1,7 @@
 ﻿using Contracts;
-using Entities;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Shared.RequestFeatures;
 
 namespace Repository
 {
@@ -18,14 +13,24 @@ namespace Repository
         }
 
 
-        public IEnumerable<Product> GetAllProducts(bool trackChanges)
+        //public async Task<IEnumerable<Product>> GetAllProducts(bool trackChanges)
+        //{
+        //    return await FindAll(trackChanges).OrderBy(i => i.CreatedDate).ToListAsync();
+        //}
+
+        public async Task<IEnumerable<Product>> GetAllProducts(ProductParameters productParameters, bool trackChanges)
         {
-            return FindAll(trackChanges).OrderBy(i => i.CreatedDate).ToList();
+            return await FindAll(trackChanges)
+                .Where(i => i.IsVisibility == true)
+                .OrderBy(i => i.CreatedDate)
+                .Skip((productParameters.PageNumber - 1) * productParameters.PageSize)
+                .Take(productParameters.PageSize)
+                .ToListAsync();
         }
 
-        public Product? GetProduct(Guid productId, bool trackChanges)
+        public async Task<Product?> GetProduct(Guid productId, bool trackChanges)
         {
-            return FindByCondition(i => i.ProductId.Equals(productId), trackChanges).SingleOrDefault();
+            return await FindByCondition(i => i.ProductId.Equals(productId), trackChanges).SingleOrDefaultAsync();
         }
 
         public void CreateProduct(Product product) => Create(product);

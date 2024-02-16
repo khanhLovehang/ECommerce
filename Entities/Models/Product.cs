@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Entities;
+namespace Entities.Models;
 
 public partial class Product
 {
@@ -12,6 +12,11 @@ public partial class Product
     public bool? IsDeleted { get; set; }
 
     public int? Status { get; set; }
+
+    /// <summary>
+    /// 0: Simple product, 1: Configurable Product, 2: Grouped Product, 4: Virtual Product, 5: Bundle Product
+    /// </summary>
+    public int? ProductType { get; set; }
 
     public string ProductName { get; set; } = null!;
 
@@ -86,10 +91,7 @@ public partial class Product
 
     public bool? IsShowOnMainPage { get; set; }
 
-    /// <summary>
-    /// 0: Simple product, 1: Configurable Product, 2: Grouped Product, 4: Virtual Product, 5: Bundle Product
-    /// </summary>
-    public int? ProductType { get; set; }
+    public bool? IsVisibility { get; set; }
 
     public virtual ICollection<AttributeValue> AttributeValues { get; set; } = new List<AttributeValue>();
 

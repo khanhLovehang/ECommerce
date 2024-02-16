@@ -1,4 +1,4 @@
-﻿using Attribute = Entities.Attribute;
+﻿using Attribute = Entities.Models.Attribute;
 
 namespace Repository
 {
