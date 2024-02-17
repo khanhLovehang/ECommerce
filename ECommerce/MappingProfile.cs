@@ -18,6 +18,9 @@ namespace ECommerce
             CreateMap<User, UserDto>();
             CreateMap<Product, ProductDto>();
             CreateMap<ProductForCreationDto, Product>();
+            CreateMap<AttributeValue, AttributeValueDto>();
+            CreateMap<AttributeValueForCreationDto, AttributeValue>();
+
 
         }
     }

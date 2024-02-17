@@ -18,6 +18,8 @@ namespace Contracts
     {
         IUserRepository User { get; }
         IProductRepository Product { get; }
+        IAttributeRepository Attribute { get; }
+        IAttributeValueRepository AttributeValue { get; }
 
         Task SaveAsync();
     }

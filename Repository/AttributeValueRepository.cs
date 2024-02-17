@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -17,9 +18,27 @@ namespace Repository
         #endregion
 
         #region methods
-        public List<AttributeValue> GetListAttributeValueByProductId(Guid productId, bool trackChanges) {
-            return FindByCondition(i => i.ProductId.Equals(productId), trackChanges).ToList();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="trackChanges"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<AttributeValue>> GetAttributesValue(Guid productId, bool trackChanges) =>
+            await FindByCondition(i => i.ProductId.Equals(productId), trackChanges).OrderBy(i => i.AttributeId).ToListAsync();
+
+        public async Task<AttributeValue> GetAttributeValue(Guid productId, int id, bool trackChanges) =>
+            await FindByCondition(i => i.ProductId.Equals(productId) && i.AttributeValueId.Equals(id), trackChanges).SingleOrDefaultAsync();
+
+        public void CreateAttributeValueForProduct(Guid productId, AttributeValue attributeValue)
+        {
+            attributeValue.ProductId = productId;
+            Create(attributeValue);
         }
+
+
+
         #endregion
     }
 }

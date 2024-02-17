@@ -29,7 +29,7 @@ namespace Service
         #region methods
 
         /// <summary>
-        /// Lấy all sản phẩm
+        /// Get all product
         /// </summary>
         /// <param name="trackChanges"></param>
         /// <returns></returns>
@@ -41,25 +41,25 @@ namespace Service
         }
 
         /// <summary>
-        /// Lấy chi tiết sản phẩm
+        /// Get product detail
         /// </summary>
         /// <param name="productId"></param>
         /// <param name="trackChanges"></param>
         /// <returns></returns>
         /// <exception cref="ProductNotFoundException"></exception>
-        public async Task<ProductDto> GetProductAsync(Guid productId, bool trackChanges)
+        public async Task<ProductDto> GetProductAsync(Guid id, bool trackChanges)
         {
-            var product = await _repository.Product.GetProduct(productId, trackChanges);
+            var product = await _repository.Product.GetProduct(id, trackChanges);
 
             if (product is null)
-                throw new ProductNotFoundException(productId);
+                throw new ProductNotFoundException(id);
 
             var productDto = _mapper.Map<ProductDto>(product);
             return productDto;
         }
 
         /// <summary>
-        /// Thêm sản phẩm
+        /// Add product
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>

@@ -4,5 +4,7 @@
     {
         IUserService UserService { get; }
         IProductService ProductService { get; }
+        IAttributeService AttributeService { get; }
+        IAttributeValueService AttributeValueService { get; }
     }
 }

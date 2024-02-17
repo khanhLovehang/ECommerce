@@ -23,7 +23,7 @@ namespace ECommerce.Presentation.Controllers
         #region methods
 
         /// <summary>
-        /// Lấy tất cả sản phẩm
+        /// Get all product
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -35,7 +35,7 @@ namespace ECommerce.Presentation.Controllers
         }
 
         /// <summary>
-        /// Lấy chi tiết sản phẩm
+        /// Get product
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -48,7 +48,7 @@ namespace ECommerce.Presentation.Controllers
         }
 
         /// <summary>
-        /// Thêm sản phẩm
+        /// Add product
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
@@ -58,7 +58,7 @@ namespace ECommerce.Presentation.Controllers
             if (product is null)
                 return BadRequest("ProductForCreationDto object is null");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
             ModelState.ClearValidationState(nameof(ProductForCreationDto));
@@ -70,6 +70,8 @@ namespace ECommerce.Presentation.Controllers
             return CreatedAtRoute("ProductById", new { id = createdProduct.ProductId }, createdProduct);
         }
 
+        
+        
 
         #endregion
 
