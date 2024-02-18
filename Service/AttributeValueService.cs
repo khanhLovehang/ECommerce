@@ -35,14 +35,14 @@ namespace Service
         /// <param name="trackChanges"></param>
         /// <returns></returns>
         /// <exception cref="AttributeValueNotFoundException"></exception>
-        public async Task<IEnumerable<AttributeValueDto>> GetAttributesValue(Guid productId, bool trackChanges)
+        public async Task<IEnumerable<AttributeValueDto>> GetAttributeValues(Guid productId, bool trackChanges)
         {
             var product = await _repository.Product.GetProduct(productId, trackChanges);
 
             if (product is null)
                 throw new ProductNotFoundException(productId);
 
-            var attributesValueFromDb = await _repository.AttributeValue.GetAttributesValue(productId, trackChanges);
+            var attributesValueFromDb = await _repository.AttributeValue.GetAttributeValues(productId, trackChanges);
 
             var attributesValueDto = _mapper.Map<IEnumerable<AttributeValueDto>>(attributesValueFromDb);
 

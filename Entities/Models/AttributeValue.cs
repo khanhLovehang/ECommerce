@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models;
 
@@ -9,6 +10,7 @@ public partial class AttributeValue
 
     public int? AttributeId { get; set; }
 
+    [ForeignKey(nameof(Product))]
     public Guid? ProductId { get; set; }
 
     public string? Value { get; set; }

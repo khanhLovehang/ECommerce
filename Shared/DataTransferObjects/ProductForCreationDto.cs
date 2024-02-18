@@ -24,7 +24,6 @@ namespace Shared.DataTransferObjects
                                           , string Thumbnail
                                           , int Gender
                                           , int Age
-                                          , DateTime CreatedDate
                                           , string CreatedBy
                                           , Guid CreatedById
                                           , int Quantity
@@ -36,6 +35,6 @@ namespace Shared.DataTransferObjects
                                           , bool IsRecommend
                                           , bool IsShowOnMainPage
                                           , int ProductType
-                                          , IEnumerable<AttributeValueForCreationDto> AttributesValue
+                                          , IEnumerable<AttributeValueForCreationDto> AttributeValues
                             );
 }

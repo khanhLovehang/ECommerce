@@ -11,7 +11,7 @@ namespace Contracts
     public interface IAttributeValueRepository
     {
 
-        Task<IEnumerable<AttributeValue>> GetAttributesValue(Guid productId, bool trackChanges);
+        Task<IEnumerable<AttributeValue>> GetAttributeValues(Guid productId, bool trackChanges);
         Task<AttributeValue> GetAttributeValue(Guid productId, int id, bool trackChanges);
 
         void CreateAttributeValueForProduct(Guid productId, AttributeValue attributeValue);

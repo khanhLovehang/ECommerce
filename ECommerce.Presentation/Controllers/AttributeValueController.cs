@@ -4,7 +4,7 @@ using Shared.DataTransferObjects;
 
 namespace ECommerce.Presentation.Controllers
 {
-    [Route("/api/products/{productId}/attributes-value")]
+    [Route("/api/products/{productId}/attribute-values")]
     [ApiController]
     public class AttributeValueController : ControllerBase
     {
@@ -27,9 +27,9 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="productId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAttributesValue(Guid productId)
+        public async Task<IActionResult> GetAttributeValues(Guid productId)
         {
-            var attributesValue = await _service.AttributeValueService.GetAttributesValue(productId, trackChanges: false);
+            var attributesValue = await _service.AttributeValueService.GetAttributeValues(productId, trackChanges: false);
 
             return Ok(attributesValue);
         }
