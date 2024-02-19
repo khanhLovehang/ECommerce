@@ -5,6 +5,7 @@ using Entities.Exceptions;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Service
 {
@@ -74,6 +75,43 @@ namespace Service
 
             return productToReturn;
         }
+
+        public async Task<IEnumerable<ProductDto>> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        {
+            if (ids is null)
+                throw new IdParametersBadRequestException();
+
+            var productEntities = await _repository.Product.GetByIds(ids, trackChanges);
+
+            if (ids.Count() != productEntities.Count())
+                throw new CollectionByIdsBadRequestException();
+
+            var companiesToReturn = _mapper.Map<IEnumerable<ProductDto>>(productEntities);
+            return companiesToReturn;
+        }
+
+        public async Task<(IEnumerable<ProductDto> products, string ids)> CreateProductCollection(IEnumerable<ProductForCreationDto> productCollection)
+        {
+            if (productCollection is null)
+                throw new ProductCollectionBadRequest();
+
+            var productEntities = _mapper.Map<IEnumerable<Product>>(productCollection);
+
+            foreach (var product in productEntities)
+            {
+                _repository.Product.CreateProduct(product);
+            }
+            await _repository.SaveAsync();
+
+            var productCollectionToReturn = _mapper.Map<IEnumerable<ProductDto>>(productEntities);
+
+            var ids = string.Join(",", productCollectionToReturn.Select(c => c.ProductId));
+
+            return (products: productCollectionToReturn, ids: ids);
+        }
+
+
+
 
         #endregion
     }

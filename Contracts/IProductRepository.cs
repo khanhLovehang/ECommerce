@@ -1,5 +1,6 @@
 ﻿using Entities.Models;
 using Shared.RequestFeatures;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Contracts
 {
@@ -10,5 +11,7 @@ namespace Contracts
         Task<Product?> GetProduct(Guid id, bool trackChanges);
 
         void CreateProduct(Product product);
+        Task<IEnumerable<Product>> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+
     }
 }

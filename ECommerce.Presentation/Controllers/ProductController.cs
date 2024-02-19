@@ -2,6 +2,7 @@
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
+using ECommerce.Presentation.ModelBinders;
 
 namespace ECommerce.Presentation.Controllers
 {
@@ -23,7 +24,7 @@ namespace ECommerce.Presentation.Controllers
         #region methods
 
         /// <summary>
-        /// Get all product
+        /// Get all products
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -35,7 +36,7 @@ namespace ECommerce.Presentation.Controllers
         }
 
         /// <summary>
-        /// Get product
+        /// Get a product
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -48,7 +49,7 @@ namespace ECommerce.Presentation.Controllers
         }
 
         /// <summary>
-        /// Add product
+        /// Create a product
         /// </summary>
         /// <param name="product"></param>
         /// <returns></returns>
@@ -70,8 +71,33 @@ namespace ECommerce.Presentation.Controllers
             return CreatedAtRoute("ProductById", new { id = createdProduct.ProductId }, createdProduct);
         }
 
-        
-        
+        /// <summary>
+        /// Get a collection of product
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        [HttpGet("collection/({ids})", Name = "ProductCollection")]
+        public async Task<IActionResult> GetProductCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
+        {
+            var products = await _service.ProductService.GetByIds(ids, trackChanges: false);
+
+            return Ok(products);
+        }
+
+        /// <summary>
+        /// Create a collection of product
+        /// </summary>
+        /// <param name="productCollection"></param>
+        /// <returns></returns>
+        [HttpPost("collection")]
+        public async Task <IActionResult> CreateProductCollection([FromBody] IEnumerable<ProductForCreationDto> productCollection)
+        {
+            var result = await _service.ProductService.CreateProductCollection(productCollection);
+
+            return CreatedAtRoute("ProductCollection", new { result.ids }, result.products);
+        }
+
+
 
         #endregion
 

@@ -2,6 +2,7 @@
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Shared.RequestFeatures;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Repository
 {
@@ -28,9 +29,12 @@ namespace Repository
                 .ToListAsync();
         }
 
-        public async Task<Product?> GetProduct(Guid id, bool trackChanges) => await FindByCondition(i => i.ProductId.Equals(id), trackChanges).SingleOrDefaultAsync();
-
+        public async Task<Product?> GetProduct(Guid id, bool trackChanges) => 
+            await FindByCondition(i => i.ProductId.Equals(id), trackChanges).SingleOrDefaultAsync();
         public void CreateProduct(Product product) => Create(product);
+
+        public async Task<IEnumerable<Product>> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
+           await FindByCondition(x => ids.Contains(x.ProductId), trackChanges).ToListAsync();
 
     }
 }
