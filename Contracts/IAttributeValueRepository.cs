@@ -13,7 +13,8 @@ namespace Contracts
 
         Task<IEnumerable<AttributeValue>> GetAttributeValues(Guid productId, bool trackChanges);
         Task<AttributeValue> GetAttributeValue(Guid productId, int id, bool trackChanges);
-
         void CreateAttributeValueForProduct(Guid productId, AttributeValue attributeValue);
+        void DeleteAttributeValue(AttributeValue attributeValue);
+
     }
 }

@@ -81,6 +81,7 @@ namespace Repository
 
                 entity.HasOne(d => d.Product).WithMany(p => p.AttributeValues)
                     .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_AttributeValue_Product");
             });
 

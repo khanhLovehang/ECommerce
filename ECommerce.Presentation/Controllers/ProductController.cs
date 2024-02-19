@@ -97,7 +97,13 @@ namespace ECommerce.Presentation.Controllers
             return CreatedAtRoute("ProductCollection", new { result.ids }, result.products);
         }
 
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+           await _service.ProductService.DeleteProduct(id, trackChanges: false);
 
+            return NoContent();
+        }
 
         #endregion
 

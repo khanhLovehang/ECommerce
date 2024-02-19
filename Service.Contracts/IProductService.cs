@@ -13,6 +13,7 @@ namespace Service.Contracts
 
         Task<(IEnumerable<ProductDto> products, string ids)> CreateProductCollection
                 (IEnumerable<ProductForCreationDto> companyCollection);
+        Task DeleteProduct(Guid productId, bool trackChanges);
 
     }
 }

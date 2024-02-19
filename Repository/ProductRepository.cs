@@ -29,12 +29,16 @@ namespace Repository
                 .ToListAsync();
         }
 
-        public async Task<Product?> GetProduct(Guid id, bool trackChanges) => 
+        public async Task<Product> GetProduct(Guid id, bool trackChanges) => 
             await FindByCondition(i => i.ProductId.Equals(id), trackChanges).SingleOrDefaultAsync();
+
         public void CreateProduct(Product product) => Create(product);
 
         public async Task<IEnumerable<Product>> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
            await FindByCondition(x => ids.Contains(x.ProductId), trackChanges).ToListAsync();
+
+        public async Task DeleteProduct(Product product) => Delete(product);
+
 
     }
 }

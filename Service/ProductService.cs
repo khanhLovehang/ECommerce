@@ -76,6 +76,14 @@ namespace Service
             return productToReturn;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <param name="trackChanges"></param>
+        /// <returns></returns>
+        /// <exception cref="IdParametersBadRequestException"></exception>
+        /// <exception cref="CollectionByIdsBadRequestException"></exception>
         public async Task<IEnumerable<ProductDto>> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
         {
             if (ids is null)
@@ -89,7 +97,13 @@ namespace Service
             var companiesToReturn = _mapper.Map<IEnumerable<ProductDto>>(productEntities);
             return companiesToReturn;
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productCollection"></param>
+        /// <returns></returns>
+        /// <exception cref="ProductCollectionBadRequest"></exception>
         public async Task<(IEnumerable<ProductDto> products, string ids)> CreateProductCollection(IEnumerable<ProductForCreationDto> productCollection)
         {
             if (productCollection is null)
@@ -111,6 +125,17 @@ namespace Service
         }
 
 
+        public async Task DeleteProduct(Guid productId, bool trackChanges)
+        {
+            var product = await _repository.Product.GetProduct(productId, trackChanges);
+
+            if (product is null)
+                throw new ProductNotFoundException(productId);
+
+            await _repository.Product.DeleteProduct(product);
+
+            await _repository.SaveAsync();
+        }
 
 
         #endregion

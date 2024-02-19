@@ -86,6 +86,25 @@ namespace Service
             return attributeValueToReturn;
         }
 
+
+        public async Task DeleteAttributeValueForProduct(Guid productId, int id, bool trackChanges)
+        {
+            var product = await _repository.Product.GetProduct(productId, trackChanges);
+
+            if (product is null)
+                throw new ProductNotFoundException(productId);
+
+            var attributeValueForProduct = await _repository.AttributeValue.GetAttributeValue(productId, id, trackChanges);
+
+            if (attributeValueForProduct is null)
+                throw new AttributeValueNotFoundException(id);
+
+            _repository.AttributeValue.DeleteAttributeValue(attributeValueForProduct);
+
+            await _repository.SaveAsync();
+        }
+
+
         #endregion
     }
 }

@@ -8,10 +8,11 @@ namespace Contracts
     {
         Task<IEnumerable<Product>> GetAllProducts(ProductParameters productParameters, bool trackChanges);
 
-        Task<Product?> GetProduct(Guid id, bool trackChanges);
+        Task<Product> GetProduct(Guid id, bool trackChanges);
 
         void CreateProduct(Product product);
         Task<IEnumerable<Product>> GetByIds(IEnumerable<Guid> ids, bool trackChanges);
+        Task DeleteProduct(Product product);
 
     }
 }

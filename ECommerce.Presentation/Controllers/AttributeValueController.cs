@@ -73,6 +73,15 @@ namespace ECommerce.Presentation.Controllers
 
             //return Ok(createdAttributeValueProduct);
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteAttributeValueForProduct(Guid productId, int id)
+        {
+            await _service.AttributeValueService.DeleteAttributeValueForProduct(productId, id, trackChanges: false);
+
+            return NoContent();
+        }
+
         #endregion
 
     }
