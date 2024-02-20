@@ -97,6 +97,11 @@ namespace ECommerce.Presentation.Controllers
             return CreatedAtRoute("ProductCollection", new { result.ids }, result.products);
         }
 
+        /// <summary>
+        /// Delete product (and its attribute value)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
@@ -104,6 +109,24 @@ namespace ECommerce.Presentation.Controllers
 
             return NoContent();
         }
+
+        /// <summary>
+        /// Update product (while insert child resource - attribute value)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="company"></param>
+        /// <returns></returns>
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] ProductForUpdateDto product)
+        {
+            if (product is null)
+                return BadRequest("ProductForUpdateDto object is null");
+
+            await _service.ProductService.UpdateProduct(id, product, trackChanges: true);
+
+            return NoContent();
+        }
+
 
         #endregion
 

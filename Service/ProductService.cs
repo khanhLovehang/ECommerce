@@ -124,7 +124,13 @@ namespace Service
             return (products: productCollectionToReturn, ids: ids);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="trackChanges"></param>
+        /// <returns></returns>
+        /// <exception cref="ProductNotFoundException"></exception>
         public async Task DeleteProduct(Guid productId, bool trackChanges)
         {
             var product = await _repository.Product.GetProduct(productId, trackChanges);
@@ -137,7 +143,25 @@ namespace Service
             await _repository.SaveAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="productForUpdate"></param>
+        /// <param name="trackChanges"></param>
+        /// <returns></returns>
+        /// <exception cref="ProductNotFoundException"></exception>
+        public async Task UpdateProduct(Guid productId, ProductForUpdateDto productForUpdate, bool trackChanges)
+        {
+            var productEntity = await _repository.Product.GetProduct(productId, trackChanges);
+            
+            if (productEntity is null)
+                throw new ProductNotFoundException(productId);
 
+            _mapper.Map(productForUpdate, productEntity);
+
+            await _repository.SaveAsync();
+        }
         #endregion
     }
 }

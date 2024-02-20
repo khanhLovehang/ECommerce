@@ -1,11 +1,10 @@
 using Contracts;
-using ECommerce.ContextFactory;
 using ECommerce.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
-using Repository;
-
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +31,9 @@ builder.Services.AddControllers(config =>
 {
     config.RespectBrowserAcceptHeader = true;
     config.ReturnHttpNotAcceptable = true;
+    // placing our JsonPatchInputFormatter at the index 0 in the InputFormatters list.
+    config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+
 }).AddXmlDataContractSerializerFormatters()
 .AddCustomCSVFormatter()
 .AddApplicationPart(typeof(ECommerce.Presentation.AssemblyReference).Assembly);
@@ -82,3 +84,11 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+//This function configures support for JSON Patch using 
+//Newtonsoft.Json while leaving the other formatters unchanged.
+NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() => 
+    new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson()
+    .Services.BuildServiceProvider()
+    .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters
+    .OfType<NewtonsoftJsonPatchInputFormatter>().First();

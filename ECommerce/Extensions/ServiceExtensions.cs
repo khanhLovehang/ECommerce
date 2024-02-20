@@ -43,7 +43,8 @@ namespace ECommerce.Extensions
         //Register RepositoryContext
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
             => services.AddDbContext<RepositoryContext>(opts =>
-                     opts.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+                     opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"))
+                        .LogTo(Console.WriteLine));
 
         public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) => 
             builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));

@@ -4,7 +4,6 @@ using Entities.Models;
 using Entities.Exceptions;
 using Service.Contracts;
 using Shared.DataTransferObjects;
-using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -86,7 +85,15 @@ namespace Service
             return attributeValueToReturn;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="id"></param>
+        /// <param name="trackChanges"></param>
+        /// <returns></returns>
+        /// <exception cref="ProductNotFoundException"></exception>
+        /// <exception cref="AttributeValueNotFoundException"></exception>
         public async Task DeleteAttributeValueForProduct(Guid productId, int id, bool trackChanges)
         {
             var product = await _repository.Product.GetProduct(productId, trackChanges);
@@ -104,6 +111,76 @@ namespace Service
             await _repository.SaveAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="id"></param>
+        /// <param name="attributeValueForUpdate"></param>
+        /// <param name="proTrackChanges"></param>
+        /// <param name="attrTrackChanges"></param>
+        /// <returns></returns>
+        /// <exception cref="ProductNotFoundException"></exception>
+        /// <exception cref="AttributeValueNotFoundException"></exception>
+        public async Task UpdateAttributeValueForProduct(Guid productId, int id
+            , AttributeValueForUpdateDto attributeValueForUpdate, bool proTrackChanges, bool attrTrackChanges)
+        {
+            var product = await _repository.Product.GetProduct(productId, proTrackChanges);
+            if (product is null)
+                throw new ProductNotFoundException(productId);
+
+            var attributeValueEntity = await _repository.AttributeValue.GetAttributeValue(productId, id, attrTrackChanges);
+            if (attributeValueEntity is null)
+                throw new AttributeValueNotFoundException(id);
+
+            // We are mapping from the attributeValueForUpdate object 
+            // (we will change just the property in a request) to the
+            // attributeValueEntity — thus changing the state of the attributeValueEntity
+            // object to Modified.
+            _mapper.Map(attributeValueForUpdate, attributeValueEntity);
+
+            // Because our entity has a modified state, it is enough to call the SaveAsync
+            // method without any additional update actions.
+            await _repository.SaveAsync();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="id"></param>
+        /// <param name="proTrackChanges"></param>
+        /// <param name="attrTrackChanges"></param>
+        /// <returns></returns>
+        /// <exception cref="ProductNotFoundException"></exception>
+        /// <exception cref="AttributeValueNotFoundException"></exception>
+        public async Task<(AttributeValueForUpdateDto attributeValueToPatch, AttributeValue attributeValueEntity)> GetAttributeValueForPatch(Guid productId, int id, bool proTrackChanges, bool attrTrackChanges)
+        {
+            var product = await _repository.Product.GetProduct(productId, proTrackChanges);
+            if (product is null)
+                throw new ProductNotFoundException(productId);
+
+            var attributeValueEntity = await _repository.AttributeValue.GetAttributeValue(productId, id, attrTrackChanges);
+            if (attributeValueEntity is null)
+                throw new AttributeValueNotFoundException(id);
+
+            var attributeValueToPatch = _mapper.Map<AttributeValueForUpdateDto>(attributeValueEntity);
+
+            return (attributeValueToPatch, attributeValueEntity);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attributeValueToPatch"></param>
+        /// <param name="attributeValueEntity"></param>
+        /// <returns></returns>
+        public async Task SaveChangesForPatch(AttributeValueForUpdateDto attributeValueToPatch, AttributeValue attributeValueEntity)
+        {
+            _mapper.Map(attributeValueToPatch, attributeValueEntity);
+
+            await _repository.SaveAsync();
+        }
 
         #endregion
     }

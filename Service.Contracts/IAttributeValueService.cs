@@ -1,4 +1,5 @@
-﻿using Shared.DataTransferObjects;
+﻿using Entities.Models;
+using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
 
 
@@ -10,5 +11,9 @@ namespace Service.Contracts
         Task<AttributeValueDto> GetAttributeValue(Guid companyId, int id, bool trackChanges);
         Task<AttributeValueDto> CreateAttributeValueForProductAsync(Guid productId, AttributeValueForCreationDto attributeValue, bool trackChanges);
         Task DeleteAttributeValueForProduct(Guid productId, int id, bool trackChanges);
+        Task UpdateAttributeValueForProduct(Guid productId, int id
+            , AttributeValueForUpdateDto attributeValueForUpdate, bool proTrackChanges, bool attrTrackChanges);
+        Task<(AttributeValueForUpdateDto attributeValueToPatch, AttributeValue attributeValueEntity)> GetAttributeValueForPatch(Guid productId, int id, bool proTrackChanges, bool attrTrackChanges);
+        Task SaveChangesForPatch(AttributeValueForUpdateDto attributeValueToPatch, AttributeValue attributeValueEntity);
     }
 }

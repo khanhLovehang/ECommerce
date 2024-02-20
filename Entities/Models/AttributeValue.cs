@@ -10,7 +10,6 @@ public partial class AttributeValue
 
     public int? AttributeId { get; set; }
 
-    [ForeignKey(nameof(Product))]
     public Guid? ProductId { get; set; }
 
     public string? Value { get; set; }
