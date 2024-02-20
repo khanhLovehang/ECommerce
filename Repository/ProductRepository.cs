@@ -19,7 +19,7 @@ namespace Repository
         //    return await FindAll(trackChanges).OrderBy(i => i.CreatedDate).ToListAsync();
         //}
 
-        public async Task<IEnumerable<Product>> GetAllProducts(ProductParameters productParameters, bool trackChanges)
+        public async Task<IEnumerable<Product>> GetAllProductsAsync(ProductParameters productParameters, bool trackChanges)
         {
             return await FindAll(trackChanges)
                 .Where(i => i.IsVisibility == true)
@@ -29,15 +29,15 @@ namespace Repository
                 .ToListAsync();
         }
 
-        public async Task<Product> GetProduct(Guid id, bool trackChanges) => 
-            await FindByCondition(i => i.ProductId.Equals(id), trackChanges).SingleOrDefaultAsync();
+        public async Task<Product> GetProductAsync(Guid productId, bool trackChanges) => 
+            await FindByCondition(i => i.ProductId.Equals(productId), trackChanges).SingleOrDefaultAsync();
 
         public void CreateProduct(Product product) => Create(product);
 
-        public async Task<IEnumerable<Product>> GetByIds(IEnumerable<Guid> ids, bool trackChanges) =>
+        public async Task<IEnumerable<Product>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) =>
            await FindByCondition(x => ids.Contains(x.ProductId), trackChanges).ToListAsync();
 
-        public async Task DeleteProduct(Product product) => Delete(product);
+        public void DeleteProduct(Product product) => Delete(product);
 
 
     }

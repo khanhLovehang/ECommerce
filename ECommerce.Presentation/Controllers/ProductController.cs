@@ -79,7 +79,7 @@ namespace ECommerce.Presentation.Controllers
         [HttpGet("collection/({ids})", Name = "ProductCollection")]
         public async Task<IActionResult> GetProductCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids)
         {
-            var products = await _service.ProductService.GetByIds(ids, trackChanges: false);
+            var products = await _service.ProductService.GetByIdsAsync(ids, trackChanges: false);
 
             return Ok(products);
         }
@@ -122,7 +122,7 @@ namespace ECommerce.Presentation.Controllers
             if (product is null)
                 return BadRequest("ProductForUpdateDto object is null");
 
-            await _service.ProductService.UpdateProduct(id, product, trackChanges: true);
+            await _service.ProductService.UpdateProductAsync(id, product, trackChanges: true);
 
             return NoContent();
         }

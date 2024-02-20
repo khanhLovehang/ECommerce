@@ -64,10 +64,6 @@ namespace ECommerce.Presentation.Controllers
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            ModelState.ClearValidationState(nameof(AttributeValueForCreationDto));
-            if (!TryValidateModel(attributeValue, nameof(AttributeValueForCreationDto)))
-                return UnprocessableEntity(ModelState);
-
             var attributeValueReturn = await _service.AttributeValueService.CreateAttributeValueForProductAsync(productId, attributeValue, trackChanges: false);
 
             return CreatedAtRoute("GetAttributeValueForProduct", new { productId, id = attributeValueReturn.AttributeValueId }, attributeValueReturn);

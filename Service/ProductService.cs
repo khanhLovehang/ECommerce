@@ -36,7 +36,7 @@ namespace Service
         /// <returns></returns>
         public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductParameters productParameters, bool trackChanges)
         {
-            var products = await _repository.Product.GetAllProducts(productParameters, trackChanges);
+            var products = await _repository.Product.GetAllProductsAsync(productParameters, trackChanges);
             var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products); // Use auto mapper
             return productsDto;
         }
@@ -50,7 +50,7 @@ namespace Service
         /// <exception cref="ProductNotFoundException"></exception>
         public async Task<ProductDto> GetProductAsync(Guid id, bool trackChanges)
         {
-            var product = await _repository.Product.GetProduct(id, trackChanges);
+            var product = await _repository.Product.GetProductAsync(id, trackChanges);
 
             if (product is null)
                 throw new ProductNotFoundException(id);
@@ -84,12 +84,12 @@ namespace Service
         /// <returns></returns>
         /// <exception cref="IdParametersBadRequestException"></exception>
         /// <exception cref="CollectionByIdsBadRequestException"></exception>
-        public async Task<IEnumerable<ProductDto>> GetByIds(IEnumerable<Guid> ids, bool trackChanges)
+        public async Task<IEnumerable<ProductDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
         {
             if (ids is null)
                 throw new IdParametersBadRequestException();
 
-            var productEntities = await _repository.Product.GetByIds(ids, trackChanges);
+            var productEntities = await _repository.Product.GetByIdsAsync(ids, trackChanges);
 
             if (ids.Count() != productEntities.Count())
                 throw new CollectionByIdsBadRequestException();
@@ -97,7 +97,7 @@ namespace Service
             var companiesToReturn = _mapper.Map<IEnumerable<ProductDto>>(productEntities);
             return companiesToReturn;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -133,12 +133,12 @@ namespace Service
         /// <exception cref="ProductNotFoundException"></exception>
         public async Task DeleteProduct(Guid productId, bool trackChanges)
         {
-            var product = await _repository.Product.GetProduct(productId, trackChanges);
+            var product = await _repository.Product.GetProductAsync(productId, trackChanges);
 
             if (product is null)
                 throw new ProductNotFoundException(productId);
 
-            await _repository.Product.DeleteProduct(product);
+            _repository.Product.DeleteProduct(product);
 
             await _repository.SaveAsync();
         }
@@ -151,10 +151,10 @@ namespace Service
         /// <param name="trackChanges"></param>
         /// <returns></returns>
         /// <exception cref="ProductNotFoundException"></exception>
-        public async Task UpdateProduct(Guid productId, ProductForUpdateDto productForUpdate, bool trackChanges)
+        public async Task UpdateProductAsync(Guid productId, ProductForUpdateDto productForUpdate, bool trackChanges)
         {
-            var productEntity = await _repository.Product.GetProduct(productId, trackChanges);
-            
+            var productEntity = await _repository.Product.GetProductAsync(productId, trackChanges);
+
             if (productEntity is null)
                 throw new ProductNotFoundException(productId);
 

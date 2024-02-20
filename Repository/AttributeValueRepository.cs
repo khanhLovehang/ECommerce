@@ -25,10 +25,10 @@ namespace Repository
         /// <param name="productId"></param>
         /// <param name="trackChanges"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<AttributeValue>> GetAttributeValues(Guid productId, bool trackChanges) =>
+        public async Task<IEnumerable<AttributeValue>> GetAttributeValuesAsync(Guid productId, bool trackChanges) =>
             await FindByCondition(i => i.ProductId.Equals(productId), trackChanges).OrderBy(i => i.AttributeId).ToListAsync();
 
-        public async Task<AttributeValue> GetAttributeValue(Guid productId, int id, bool trackChanges) =>
+        public async Task<AttributeValue> GetAttributeValueAsync(Guid productId, int id, bool trackChanges) =>
             await FindByCondition(i => i.ProductId.Equals(productId) && i.AttributeValueId.Equals(id), trackChanges).SingleOrDefaultAsync();
 
         public void CreateAttributeValueForProduct(Guid productId, AttributeValue attributeValue)
