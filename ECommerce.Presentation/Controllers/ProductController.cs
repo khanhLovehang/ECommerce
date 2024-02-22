@@ -3,6 +3,7 @@ using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
 using ECommerce.Presentation.ModelBinders;
+using ECommerce.Presentation.ActionFilters;
 
 namespace ECommerce.Presentation.Controllers
 {
@@ -54,18 +55,9 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="product"></param>
         /// <returns></returns>
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateProduct([FromBody] ProductForCreationDto product)
         {
-            if (product is null)
-                return BadRequest("ProductForCreationDto object is null");
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
-            ModelState.ClearValidationState(nameof(ProductForCreationDto));
-            if (!TryValidateModel(product, nameof(ProductForCreationDto)))
-                return UnprocessableEntity(ModelState);
-
             var createdProduct = await _service.ProductService.CreateProductAsync(product);
 
             return CreatedAtRoute("ProductById", new { id = createdProduct.ProductId }, createdProduct);
@@ -105,7 +97,7 @@ namespace ECommerce.Presentation.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
-           await _service.ProductService.DeleteProduct(id, trackChanges: false);
+           await _service.ProductService.DeleteProductAsync(id, trackChanges: false);
 
             return NoContent();
         }
@@ -117,11 +109,9 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="company"></param>
         /// <returns></returns>
         [HttpPut("{id:guid}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] ProductForUpdateDto product)
         {
-            if (product is null)
-                return BadRequest("ProductForUpdateDto object is null");
-
             await _service.ProductService.UpdateProductAsync(id, product, trackChanges: true);
 
             return NoContent();

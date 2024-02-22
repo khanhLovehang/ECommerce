@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Entities.Models;
 
-public partial class Product
+public class Product
 {
     public Guid ProductId { get; set; }
 
@@ -16,8 +17,11 @@ public partial class Product
     /// <summary>
     /// 0: Simple product, 1: Configurable Product, 2: Grouped Product, 4: Virtual Product, 5: Bundle Product
     /// </summary>
+    [Range(0, 5, ErrorMessage = "ProductType is from 0 to 5.")]
     public int? ProductType { get; set; }
 
+    [Required(ErrorMessage = "Product name is a required field.")]
+    [MaxLength(500, ErrorMessage = "Maximum length for the Name is 500 characters.")]
     public string ProductName { get; set; } = null!;
 
     public decimal? Price { get; set; }
@@ -28,8 +32,10 @@ public partial class Product
 
     public int? BrandId { get; set; }
 
+    [MaxLength(500, ErrorMessage = "Maximum length for the ShortDescription is 500 characters.")]
     public string? ShortDescription { get; set; }
 
+    [MaxLength(1000, ErrorMessage = "Maximum length for the Description is 1000 characters.")]
     public string? Description { get; set; }
 
     public int? DiscountPercent { get; set; }
@@ -41,6 +47,7 @@ public partial class Product
     /// <summary>
     /// 0: Women, 1: Men, 2: Boys, 3: Girls, 4: Unisex
     /// </summary>
+    [Range(0, 4, ErrorMessage = "Gender is from 0 to 4.")]
     public int? Gender { get; set; }
 
     public int? Age { get; set; }
@@ -68,6 +75,7 @@ public partial class Product
     /// <summary>
     /// 0: OutStock, 1: InStock
     /// </summary>
+    [Range(0, 1, ErrorMessage = "Gender is from 0 to 1.")]
     public int? StockStatus { get; set; }
 
     /// <summary>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
+﻿using ECommerce.Presentation.ActionFilters;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
@@ -28,11 +29,11 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="productId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAttributeValues(Guid productId)
+        public async Task<IActionResult> GetAttributeValuesForProduct(Guid productId)
         {
-            var attributesValue = await _service.AttributeValueService.GetAttributeValues(productId, trackChanges: false);
+            var attributeValues = await _service.AttributeValueService.GetAttributeValuesAsync(productId, trackChanges: false);
 
-            return Ok(attributesValue);
+            return Ok(attributeValues);
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace ECommerce.Presentation.Controllers
         [HttpGet("{id:int}", Name = "GetAttributeValueForProduct")]
         public async Task<IActionResult> GetAttributeValue(Guid productId, int id)
         {
-            var attributeValue = await _service.AttributeValueService.GetAttributeValue(productId, id, trackChanges: false);
+            var attributeValue = await _service.AttributeValueService.GetAttributeValueAsync(productId, id, trackChanges: false);
 
             return Ok(attributeValue);
         }
@@ -56,19 +57,12 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="attributeValue"></param>
         /// <returns></returns>
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> CreateAttributeValueForProduct(Guid productId, [FromBody] AttributeValueForCreationDto attributeValue)
         {
-            if (attributeValue is null)
-                return BadRequest("AttributeValueForCreationDto object is null");
-
-            if (!ModelState.IsValid)
-                return UnprocessableEntity(ModelState);
-
             var attributeValueReturn = await _service.AttributeValueService.CreateAttributeValueForProductAsync(productId, attributeValue, trackChanges: false);
 
             return CreatedAtRoute("GetAttributeValueForProduct", new { productId, id = attributeValueReturn.AttributeValueId }, attributeValueReturn);
-
-            //return Ok(createdAttributeValueProduct);
         }
 
         /// <summary>
@@ -93,11 +87,9 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="attributeValue"></param>
         /// <returns></returns>
         [HttpPut("{id:int}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> UpdateAttributeValueForProduct(Guid productId, int id, [FromBody] AttributeValueForUpdateDto attributeValue)
         {
-            if (attributeValue is null)
-                return BadRequest("AttributeValueForUpdateDto object is null");
-
             await _service.AttributeValueService.UpdateAttributeValueForProduct(productId, id, attributeValue, proTrackChanges: false, attrTrackChanges: true);
 
             return NoContent();

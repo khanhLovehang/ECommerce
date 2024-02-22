@@ -35,6 +35,6 @@ namespace Shared.DataTransferObjects
                                           , bool IsRecommend
                                           , bool IsShowOnMainPage
                                           , int ProductType
-                                          , IEnumerable<AttributeValueForCreationDto> AttributeValues
+                                          , IEnumerable<AttributeValueForCreationDto>? AttributeValues
                             );
 }

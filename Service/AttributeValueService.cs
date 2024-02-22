@@ -34,12 +34,9 @@ namespace Service
         /// <param name="trackChanges"></param>
         /// <returns></returns>
         /// <exception cref="AttributeValueNotFoundException"></exception>
-        public async Task<IEnumerable<AttributeValueDto>> GetAttributeValues(Guid productId, bool trackChanges)
+        public async Task<IEnumerable<AttributeValueDto>> GetAttributeValuesAsync(Guid productId, bool trackChanges)
         {
-            var product = await _repository.Product.GetProductAsync(productId, trackChanges);
-
-            if (product is null)
-                throw new ProductNotFoundException(productId);
+            await CheckIfProductExists(productId, trackChanges);
 
             var attributesValueFromDb = await _repository.AttributeValue.GetAttributeValuesAsync(productId, trackChanges);
 
@@ -48,15 +45,11 @@ namespace Service
             return attributesValueDto;
         }
 
-        public async Task<AttributeValueDto> GetAttributeValue(Guid productId, int id, bool trackChanges)
+        public async Task<AttributeValueDto> GetAttributeValueAsync(Guid productId, int id, bool trackChanges)
         {
-            var product = await _repository.Product.GetProductAsync(productId, trackChanges);
-            if (product is null)
-                throw new ProductNotFoundException(productId);
+            await CheckIfProductExists(productId, trackChanges);
 
-            var attributeValueFromDb = await _repository.AttributeValue.GetAttributeValueAsync(productId, id, trackChanges);
-            if (attributeValueFromDb is null)
-                throw new AttributeValueNotFoundException(id);
+            var attributeValueFromDb = GetAttributeValueForProductAndCheckIfItExists(productId, id, trackChanges);
 
             var attributeValue = _mapper.Map<AttributeValueDto>(attributeValueFromDb);
 
@@ -70,14 +63,12 @@ namespace Service
         /// <returns></returns>
         public async Task<AttributeValueDto> CreateAttributeValueForProductAsync(Guid productId, AttributeValueForCreationDto attributeValueForCreation, bool trackChanges)
         {
-
-            var product = await _repository.Product.GetProductAsync(productId, trackChanges);
-            if (product is null)
-                throw new ProductNotFoundException(productId);
+            await CheckIfProductExists(productId, trackChanges);
 
             var attributeValueEntity = _mapper.Map<AttributeValue>(attributeValueForCreation);
 
             _repository.AttributeValue.CreateAttributeValueForProduct(productId, attributeValueEntity);
+
             await _repository.SaveAsync();
 
             var attributeValueToReturn = _mapper.Map<AttributeValueDto>(attributeValueEntity);
@@ -96,15 +87,9 @@ namespace Service
         /// <exception cref="AttributeValueNotFoundException"></exception>
         public async Task DeleteAttributeValueForProduct(Guid productId, int id, bool trackChanges)
         {
-            var product = await _repository.Product.GetProductAsync(productId, trackChanges);
+            await CheckIfProductExists(productId, trackChanges);
 
-            if (product is null)
-                throw new ProductNotFoundException(productId);
-
-            var attributeValueForProduct = await _repository.AttributeValue.GetAttributeValueAsync(productId, id, trackChanges);
-
-            if (attributeValueForProduct is null)
-                throw new AttributeValueNotFoundException(id);
+            var attributeValueForProduct = await GetAttributeValueForProductAndCheckIfItExists(productId, id, trackChanges);
 
             _repository.AttributeValue.DeleteAttributeValue(attributeValueForProduct);
 
@@ -125,13 +110,9 @@ namespace Service
         public async Task UpdateAttributeValueForProduct(Guid productId, int id
             , AttributeValueForUpdateDto attributeValueForUpdate, bool proTrackChanges, bool attrTrackChanges)
         {
-            var product = await _repository.Product.GetProductAsync(productId, proTrackChanges);
-            if (product is null)
-                throw new ProductNotFoundException(productId);
+            await CheckIfProductExists(productId, proTrackChanges);
 
-            var attributeValueEntity = await _repository.AttributeValue.GetAttributeValueAsync(productId, id, attrTrackChanges);
-            if (attributeValueEntity is null)
-                throw new AttributeValueNotFoundException(id);
+            var attributeValueEntity = await GetAttributeValueForProductAndCheckIfItExists(productId, id, attrTrackChanges);
 
             // We are mapping from the attributeValueForUpdate object 
             // (we will change just the property in a request) to the
@@ -156,13 +137,9 @@ namespace Service
         /// <exception cref="AttributeValueNotFoundException"></exception>
         public async Task<(AttributeValueForUpdateDto attributeValueToPatch, AttributeValue attributeValueEntity)> GetAttributeValueForPatch(Guid productId, int id, bool proTrackChanges, bool attrTrackChanges)
         {
-            var product = await _repository.Product.GetProductAsync(productId, proTrackChanges);
-            if (product is null)
-                throw new ProductNotFoundException(productId);
+            await CheckIfProductExists(productId, proTrackChanges);
 
-            var attributeValueEntity = await _repository.AttributeValue.GetAttributeValueAsync(productId, id, attrTrackChanges);
-            if (attributeValueEntity is null)
-                throw new AttributeValueNotFoundException(id);
+            var attributeValueEntity = await GetAttributeValueForProductAndCheckIfItExists(productId, id, attrTrackChanges);
 
             var attributeValueToPatch = _mapper.Map<AttributeValueForUpdateDto>(attributeValueEntity);
 
@@ -180,6 +157,25 @@ namespace Service
             _mapper.Map(attributeValueToPatch, attributeValueEntity);
 
             await _repository.SaveAsync();
+        }
+
+        #endregion
+
+        #region private methods
+        private async Task CheckIfProductExists(Guid productId, bool trackChanges)
+        {
+            var product = await _repository.Product.GetProductAsync(productId, trackChanges);
+            if (product is null)
+                throw new ProductNotFoundException(productId);
+        }
+
+        private async Task<AttributeValue> GetAttributeValueForProductAndCheckIfItExists(Guid productId, int id, bool trackChanges)
+        {
+            var attributeValueDb = await _repository.AttributeValue.GetAttributeValueAsync(productId, id, trackChanges);
+            if (attributeValueDb is null)
+                throw new AttributeValueNotFoundException(id);
+
+            return attributeValueDb;
         }
 
         #endregion

@@ -12,7 +12,7 @@ namespace Service.Contracts
         Task<IEnumerable<ProductDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         Task<(IEnumerable<ProductDto> products, string ids)> CreateProductCollection
                 (IEnumerable<ProductForCreationDto> companyCollection);
-        Task DeleteProduct(Guid productId, bool trackChanges);
+        Task DeleteProductAsync(Guid productId, bool trackChanges);
         Task UpdateProductAsync(Guid productId, ProductForUpdateDto productForUpdate, bool trackChanges);
 
     }
