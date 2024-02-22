@@ -4,6 +4,7 @@ using Entities.Models;
 using Entities.Exceptions;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
 
 namespace Service
 {
@@ -34,15 +35,16 @@ namespace Service
         /// <param name="trackChanges"></param>
         /// <returns></returns>
         /// <exception cref="AttributeValueNotFoundException"></exception>
-        public async Task<IEnumerable<AttributeValueDto>> GetAttributeValuesAsync(Guid productId, bool trackChanges)
+        public async Task<(IEnumerable<AttributeValueDto> attributeValues, MetaData metaData)> GetAttributeValuesAsync(Guid productId, AttributeParameters attributeParameters, bool trackChanges)
         {
             await CheckIfProductExists(productId, trackChanges);
 
-            var attributesValueFromDb = await _repository.AttributeValue.GetAttributeValuesAsync(productId, trackChanges);
+            //var attributesValueFromDb = await _repository.AttributeValue.GetAttributeValuesAsync(productId, attributeParameters, trackChanges);
+            var attributesValueWithMetaData = await _repository.AttributeValue.GetAttributeValuesAsync(productId, attributeParameters, trackChanges);
 
-            var attributesValueDto = _mapper.Map<IEnumerable<AttributeValueDto>>(attributesValueFromDb);
+            var attributesValueDto = _mapper.Map<IEnumerable<AttributeValueDto>>(attributesValueWithMetaData);
 
-            return attributesValueDto;
+            return (attributeValues: attributesValueDto, metaData: attributesValueWithMetaData.MetaData);
         }
 
         public async Task<AttributeValueDto> GetAttributeValueAsync(Guid productId, int id, bool trackChanges)

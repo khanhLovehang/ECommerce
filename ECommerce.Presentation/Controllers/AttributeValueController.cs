@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
+using System.Text.Json;
 
 namespace ECommerce.Presentation.Controllers
 {
@@ -29,11 +31,14 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="productId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAttributeValuesForProduct(Guid productId)
+        public async Task<IActionResult> GetAttributeValuesForProduct(Guid productId, [FromQuery] AttributeParameters attributeParameters)
         {
-            var attributeValues = await _service.AttributeValueService.GetAttributeValuesAsync(productId, trackChanges: false);
+            //var attributeValues = await _service.AttributeValueService.GetAttributeValuesAsync(productId, attributeParameters, trackChanges: false);
+            var pagedResult = await _service.AttributeValueService.GetAttributeValuesAsync(productId, attributeParameters, trackChanges: false);
 
-            return Ok(attributeValues);
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+
+            return Ok(pagedResult.attributeValues);
         }
 
         /// <summary>

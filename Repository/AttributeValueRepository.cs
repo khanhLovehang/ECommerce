@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.RequestFeatures;
+using System.ComponentModel.Design;
 
 namespace Repository
 {
@@ -25,8 +27,19 @@ namespace Repository
         /// <param name="productId"></param>
         /// <param name="trackChanges"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<AttributeValue>> GetAttributeValuesAsync(Guid productId, bool trackChanges) =>
-            await FindByCondition(i => i.ProductId.Equals(productId), trackChanges).OrderBy(i => i.AttributeId).ToListAsync();
+        public async Task<PagedList<AttributeValue>> GetAttributeValuesAsync(Guid productId, AttributeParameters attributeParameters, bool trackChanges)
+        {
+            var attributeValues = await FindByCondition(i => i.ProductId.Equals(productId), trackChanges)
+                .OrderBy(i => i.AttributeId)
+                .Skip((attributeParameters.PageNumber - 1) * attributeParameters.PageSize)
+                .Take(attributeParameters.PageSize)
+            .ToListAsync();
+
+            var count = await FindByCondition(i => i.ProductId.Equals(productId), trackChanges).CountAsync();
+
+            return new PagedList<AttributeValue>(attributeValues, count, attributeParameters.PageNumber, attributeParameters.PageSize);
+
+        }
 
         public async Task<AttributeValue> GetAttributeValueAsync(Guid productId, int id, bool trackChanges) =>
             await FindByCondition(i => i.ProductId.Equals(productId) && i.AttributeValueId.Equals(id), trackChanges).SingleOrDefaultAsync();

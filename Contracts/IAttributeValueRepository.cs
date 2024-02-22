@@ -10,8 +10,7 @@ namespace Contracts
 {
     public interface IAttributeValueRepository
     {
-
-        Task<IEnumerable<AttributeValue>> GetAttributeValuesAsync(Guid productId, bool trackChanges);
+        Task<PagedList<AttributeValue>> GetAttributeValuesAsync(Guid productId, AttributeParameters attributeParameters, bool trackChanges);
         Task<AttributeValue> GetAttributeValueAsync(Guid productId, int id, bool trackChanges);
         void CreateAttributeValueForProduct(Guid productId, AttributeValue attributeValue);
         void DeleteAttributeValue(AttributeValue attributeValue);

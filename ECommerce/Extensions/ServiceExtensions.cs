@@ -19,7 +19,8 @@ namespace ECommerce.Extensions
               options.AddPolicy("CorsPolicy", builder =>
              builder.AllowAnyOrigin()
              .AllowAnyMethod()
-             .AllowAnyHeader());
+             .AllowAnyHeader()
+             .WithExposedHeaders("X-Pagination"));
           });
 
         //Configure an IIS integration which will eventually help us with the deployment to IIS
@@ -46,7 +47,7 @@ namespace ECommerce.Extensions
                      opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"))
                         .LogTo(Console.WriteLine));
 
-        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) => 
+        public static IMvcBuilder AddCustomCSVFormatter(this IMvcBuilder builder) =>
             builder.AddMvcOptions(config => config.OutputFormatters.Add(new CsvOutputFormatter()));
 
     }
