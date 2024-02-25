@@ -31,7 +31,7 @@ namespace ECommerce.Presentation.Controllers
         /// <param name="productId"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAttributeValuesForProduct(Guid productId, [FromQuery] AttributeParameters attributeParameters)
+        public async Task<IActionResult> GetAttributeValuesForProduct(Guid productId, [FromQuery] AttributeValueParameters attributeParameters)
         {
             //var attributeValues = await _service.AttributeValueService.GetAttributeValuesAsync(productId, attributeParameters, trackChanges: false);
             var pagedResult = await _service.AttributeValueService.GetAttributeValuesAsync(productId, attributeParameters, trackChanges: false);

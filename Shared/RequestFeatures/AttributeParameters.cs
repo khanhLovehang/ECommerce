@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared.RequestFeatures
 {
-    public class ProductParameters : RequestParameters
+    public class AttributeParameters : RequestParameters
     {
-
     }
 }

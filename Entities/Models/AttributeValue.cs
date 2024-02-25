@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities.Models;
 
-public partial class AttributeValue
+public class AttributeValue
 {
     public int AttributeValueId { get; set; }
 
-    public int? AttributeId { get; set; }
+    public  int AttributeId { get; set; }
 
-    public Guid? ProductId { get; set; }
+    public Guid ProductId { get; set; }
 
-    public string? Value { get; set; }
+    public required string Value { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 

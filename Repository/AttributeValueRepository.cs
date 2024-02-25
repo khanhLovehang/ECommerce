@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Extensions;
 using Shared.RequestFeatures;
 using System.ComponentModel.Design;
 
@@ -27,17 +28,19 @@ namespace Repository
         /// <param name="productId"></param>
         /// <param name="trackChanges"></param>
         /// <returns></returns>
-        public async Task<PagedList<AttributeValue>> GetAttributeValuesAsync(Guid productId, AttributeParameters attributeParameters, bool trackChanges)
+        public async Task<PagedList<AttributeValue>> GetAttributeValuesAsync(Guid productId, AttributeValueParameters attributeValueParameters, bool trackChanges)
         {
-            var attributeValues = await FindByCondition(i => i.ProductId.Equals(productId), trackChanges)
-                .OrderBy(i => i.AttributeId)
-                .Skip((attributeParameters.PageNumber - 1) * attributeParameters.PageSize)
-                .Take(attributeParameters.PageSize)
-            .ToListAsync();
+            //Filter + Search
+            var attributeValues = await FindByCondition(i => i.ProductId.Equals(productId) &&
+                                                             (attributeValueParameters.AttributeId == -1 || attributeValueParameters.AttributeId == null || i.AttributeId.Equals(attributeValueParameters.AttributeId)) &&
+                                                             (attributeValueParameters.Value == null || i.Value.Equals(attributeValueParameters.Value)) &&
+                                                             (attributeValueParameters.SearchTerm == null || i.Value.Contains(attributeValueParameters.SearchTerm.Trim().ToLower()))
+                                                             , trackChanges)
+               
+                .Sort(attributeValueParameters.OrderBy)
+                .ToListAsync();
 
-            var count = await FindByCondition(i => i.ProductId.Equals(productId), trackChanges).CountAsync();
-
-            return new PagedList<AttributeValue>(attributeValues, count, attributeParameters.PageNumber, attributeParameters.PageSize);
+            return PagedList<AttributeValue>.ToPagedList(attributeValues, attributeValueParameters.PageNumber, attributeValueParameters.PageSize);
 
         }
 

@@ -35,12 +35,11 @@ namespace Service
         /// <param name="trackChanges"></param>
         /// <returns></returns>
         /// <exception cref="AttributeValueNotFoundException"></exception>
-        public async Task<(IEnumerable<AttributeValueDto> attributeValues, MetaData metaData)> GetAttributeValuesAsync(Guid productId, AttributeParameters attributeParameters, bool trackChanges)
+        public async Task<(IEnumerable<AttributeValueDto> attributeValues, MetaData metaData)> GetAttributeValuesAsync(Guid productId, AttributeValueParameters attributeValueParameters, bool trackChanges)
         {
             await CheckIfProductExists(productId, trackChanges);
 
-            //var attributesValueFromDb = await _repository.AttributeValue.GetAttributeValuesAsync(productId, attributeParameters, trackChanges);
-            var attributesValueWithMetaData = await _repository.AttributeValue.GetAttributeValuesAsync(productId, attributeParameters, trackChanges);
+            var attributesValueWithMetaData = await _repository.AttributeValue.GetAttributeValuesAsync(productId, attributeValueParameters, trackChanges);
 
             var attributesValueDto = _mapper.Map<IEnumerable<AttributeValueDto>>(attributesValueWithMetaData);
 
