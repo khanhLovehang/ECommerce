@@ -1,4 +1,4 @@
-﻿using Contracts;
+﻿using Contracts.Base;
 using Microsoft.EntityFrameworkCore;
 using Repository.Context;
 using System.Linq.Expressions;

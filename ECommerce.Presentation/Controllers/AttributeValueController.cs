@@ -1,8 +1,8 @@
 ﻿using ECommerce.Presentation.ActionFilters;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Service.Contracts;
-using Shared.DataTransferObjects;
+using Service.Contracts.Manager;
+using Shared.DataTransferObjects.AttributeValueDto;
 using Shared.RequestFeatures;
 using System.Text.Json;
 
@@ -44,7 +44,7 @@ namespace ECommerce.Presentation.Controllers
         /// <summary>
         /// Get detail attribute
         /// </summary>
-        /// <param name="companyId"></param>
+        /// <param name="productId"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id:int}", Name = "GetAttributeValueForProduct")]

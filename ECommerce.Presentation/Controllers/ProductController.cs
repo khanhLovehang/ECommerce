@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Service.Contracts;
-using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
 using ECommerce.Presentation.ModelBinders;
 using ECommerce.Presentation.ActionFilters;
+using Shared.DataTransferObjects.ProductDto;
+using Service.Contracts.Manager;
 
 namespace ECommerce.Presentation.Controllers
 {
@@ -106,7 +106,7 @@ namespace ECommerce.Presentation.Controllers
         /// Update product (while insert child resource - attribute value)
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="company"></param>
+        /// <param name="product"></param>
         /// <returns></returns>
         [HttpPut("{id:guid}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]

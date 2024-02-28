@@ -1,4 +1,3 @@
-using Contracts;
 using ECommerce.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +5,7 @@ using NLog;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using ECommerce.Presentation.ActionFilters;
+using Contracts.Manager;
 
 var builder = WebApplication.CreateBuilder(args);
 

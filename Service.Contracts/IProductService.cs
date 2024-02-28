@@ -1,4 +1,4 @@
-﻿using Shared.DataTransferObjects;
+﻿using Shared.DataTransferObjects.ProductDto;
 using Shared.RequestFeatures;
 
 
@@ -11,7 +11,7 @@ namespace Service.Contracts
         Task<ProductDto> CreateProductAsync(ProductForCreationDto product);
         Task<IEnumerable<ProductDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges);
         Task<(IEnumerable<ProductDto> products, string ids)> CreateProductCollection
-                (IEnumerable<ProductForCreationDto> companyCollection);
+                (IEnumerable<ProductForCreationDto> productCollection);
         Task DeleteProductAsync(Guid productId, bool trackChanges);
         Task UpdateProductAsync(Guid productId, ProductForUpdateDto productForUpdate, bool trackChanges);
 

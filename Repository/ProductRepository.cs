@@ -4,18 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Base;
 using Repository.Context;
 using Shared.RequestFeatures;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Repository
 {
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
+        #region properties
+        #endregion
+
+        #region constructor
         public ProductRepository(RepositoryContext repositoryContext)
             : base(repositoryContext)
         {
         }
+        #endregion
 
-
+        #region methods
         //public async Task<IEnumerable<Product>> GetAllProducts(bool trackChanges)
         //{
         //    return await FindAll(trackChanges).OrderBy(i => i.CreatedDate).ToListAsync();
@@ -41,6 +45,6 @@ namespace Repository
 
         public void DeleteProduct(Product product) => Delete(product);
 
-
+        #endregion
     }
 }

@@ -1,13 +1,10 @@
-﻿using Contracts;
-using Entities.ErrorModel;
+﻿using Contracts.Manager;
 using LoggerService;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Repository.Context;
 using Repository.Manager;
-using Service.Contracts;
+using Service.Contracts.Manager;
 using Service.Manager;
-using System.Net;
 
 namespace ECommerce.Extensions
 {

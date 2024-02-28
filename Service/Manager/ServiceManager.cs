@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Contracts;
+using Contracts.Manager;
 using Service.Contracts;
+using Service.Contracts.Manager;
 
 namespace Service.Manager
 {
@@ -11,6 +12,7 @@ namespace Service.Manager
         private readonly Lazy<IAttributeService> _attributeService;
         private readonly Lazy<IAttributeValueService> _attributeValueService;
         private readonly Lazy<ICategoryService> _categoryService;
+        private readonly Lazy<IReviewService> _reviewService;
 
         public ServiceManager(IRepositoryManager repositoryManager, ILoggerManager logger, IMapper mapper)
         {
@@ -19,6 +21,7 @@ namespace Service.Manager
             _attributeService = new Lazy<IAttributeService>(() => new AttributeService(repositoryManager, logger, mapper));
             _attributeValueService = new Lazy<IAttributeValueService>(() => new AttributeValueService(repositoryManager, logger, mapper));
             _categoryService = new Lazy<ICategoryService>(() => new CategoryService(repositoryManager, logger, mapper));
+            _reviewService = new Lazy<IReviewService>(() => new ReviewService(repositoryManager, logger, mapper));
         }
 
         public IUserService UserService => _userService.Value;
@@ -26,5 +29,6 @@ namespace Service.Manager
         public IAttributeService AttributeService => _attributeService.Value;
         public IAttributeValueService AttributeValueService => _attributeValueService.Value;
         public ICategoryService CategoryService => _categoryService.Value;
+        public IReviewService ReviewService => _reviewService.Value;
     }
 }

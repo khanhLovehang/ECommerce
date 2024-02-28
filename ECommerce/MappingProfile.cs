@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Entities.Models;
 using Shared.DataTransferObjects;
-using System.Data;
-using System.Reflection.Metadata;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Shared.DataTransferObjects.AttributeValueDto;
+using Shared.DataTransferObjects.CategoryDto;
+using Shared.DataTransferObjects.ProductDto;
 
 namespace ECommerce
 {

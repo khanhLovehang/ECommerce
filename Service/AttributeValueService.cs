@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using Contracts;
 using Entities.Models;
-using Entities.Exceptions;
 using Service.Contracts;
-using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
+using Contracts.Manager;
+using Entities.Exceptions.AttributeValueExceptions;
+using Entities.Exceptions.ProductExceptions;
+using Shared.DataTransferObjects.AttributeValueDto;
 
 namespace Service
 {
@@ -34,7 +35,7 @@ namespace Service
         /// <param name="AttributeValueId"></param>
         /// <param name="trackChanges"></param>
         /// <returns></returns>
-        /// <exception cref="AttributeValueNotFoundException"></exception>
+        /// <exception cref="ReviewNotFoundException"></exception>
         public async Task<(IEnumerable<AttributeValueDto> attributeValues, MetaData metaData)> GetAttributeValuesAsync(Guid productId, AttributeValueParameters attributeValueParameters, bool trackChanges)
         {
             await CheckIfProductExists(productId, trackChanges);
@@ -85,7 +86,7 @@ namespace Service
         /// <param name="trackChanges"></param>
         /// <returns></returns>
         /// <exception cref="ProductNotFoundException"></exception>
-        /// <exception cref="AttributeValueNotFoundException"></exception>
+        /// <exception cref="ReviewNotFoundException"></exception>
         public async Task DeleteAttributeValueForProduct(Guid productId, int id, bool trackChanges)
         {
             await CheckIfProductExists(productId, trackChanges);
@@ -107,7 +108,7 @@ namespace Service
         /// <param name="attrTrackChanges"></param>
         /// <returns></returns>
         /// <exception cref="ProductNotFoundException"></exception>
-        /// <exception cref="AttributeValueNotFoundException"></exception>
+        /// <exception cref="ReviewNotFoundException"></exception>
         public async Task UpdateAttributeValueForProduct(Guid productId, int id
             , AttributeValueForUpdateDto attributeValueForUpdate, bool proTrackChanges, bool attrTrackChanges)
         {
@@ -135,7 +136,7 @@ namespace Service
         /// <param name="attrTrackChanges"></param>
         /// <returns></returns>
         /// <exception cref="ProductNotFoundException"></exception>
-        /// <exception cref="AttributeValueNotFoundException"></exception>
+        /// <exception cref="ReviewNotFoundException"></exception>
         public async Task<(AttributeValueForUpdateDto attributeValueToPatch, AttributeValue attributeValueEntity)> GetAttributeValueForPatch(Guid productId, int id, bool proTrackChanges, bool attrTrackChanges)
         {
             await CheckIfProductExists(productId, proTrackChanges);

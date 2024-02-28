@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using Contracts;
 using Entities.Models;
 using Entities.Exceptions;
 using Service.Contracts;
-using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
+using Contracts.Manager;
+using Entities.Exceptions.CategoryExceptions;
+using Shared.DataTransferObjects.CategoryDto;
 
 namespace Service
 {
@@ -92,9 +93,9 @@ namespace Service
             if (ids.Count() != CategoryEntities.Count())
                 throw new CollectionByIdsBadRequestException();
 
-            var companiesToReturn = _mapper.Map<IEnumerable<CategoryDto>>(CategoryEntities);
+            var categoriesToReturn = _mapper.Map<IEnumerable<CategoryDto>>(CategoryEntities);
 
-            return companiesToReturn;
+            return categoriesToReturn;
         }
 
         /// <summary>
@@ -103,26 +104,26 @@ namespace Service
         /// <param name="categoryCollection"></param>
         /// <returns></returns>
         /// <exception cref="categoryCollectionBadRequest"></exception>
-        //public async Task<(IEnumerable<CategoryDto> categories, string ids)> CreatecategoryCollection(IEnumerable<CategoryForCreationDto> categoryCollection)
-        //{
-        //    if (categoryCollection is null)
-        //        throw new CategoryCollectionBadRequest();
+        public async Task<(IEnumerable<CategoryDto> categories, string ids)> CreateCategoryCollection(IEnumerable<CategoryForCreationDto> categoryCollection)
+        {
+            if (categoryCollection is null)
+                throw new CategoryCollectionBadRequest();
 
-        //    var categoryEntities = _mapper.Map<IEnumerable<Category>>(categoryCollection);
+            var categoryEntities = _mapper.Map<IEnumerable<Category>>(categoryCollection);
 
-        //    foreach (var category in categoryEntities)
-        //    {
-        //        _repository.Category.CreateCategory(category);
-        //    }
+            foreach (var category in categoryEntities)
+            {
+                _repository.Category.CreateCategory(category);
+            }
 
-        //    await _repository.SaveAsync();
+            await _repository.SaveAsync();
 
-        //    var categoryCollectionToReturn = _mapper.Map<IEnumerable<CategoryDto>>(categoryEntities);
+            var categoryCollectionToReturn = _mapper.Map<IEnumerable<CategoryDto>>(categoryEntities);
 
-        //    var ids = string.Join(",", categoryCollectionToReturn.Select(c => c.CategoryId));
+            var ids = string.Join(",", categoryCollectionToReturn.Select(c => c.CategoryId));
 
-        //    return (categories: categoryCollectionToReturn, ids: ids);
-        //}
+            return (categories: categoryCollectionToReturn, ids: ids);
+        }
 
         /// <summary>
         /// 

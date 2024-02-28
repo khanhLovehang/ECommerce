@@ -12,7 +12,7 @@ public class AttributeValue
 
     public Guid ProductId { get; set; }
 
-    public required string Value { get; set; }
+    public string Value { get; set; }
 
     public DateTime? CreatedDate { get; set; }
 

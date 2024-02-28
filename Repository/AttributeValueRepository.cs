@@ -57,9 +57,6 @@ namespace Repository
 
         public void DeleteAttributeValue(AttributeValue attributeValue) => Delete(attributeValue);
 
-
-
-
         #endregion
     }
 }

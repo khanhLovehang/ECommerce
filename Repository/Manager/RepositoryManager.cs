@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Contracts.Manager;
 using Repository.Context;
 
 namespace Repository.Manager
@@ -12,6 +13,7 @@ namespace Repository.Manager
         private readonly Lazy<IAttributeRepository> _attributeRepository;
         private readonly Lazy<IAttributeValueRepository> _attributeValueRepository;
         private readonly Lazy<ICategoryRepository> _categoryRepository;
+        private readonly Lazy<IReviewRepository> _reviewRepository;
 
         #endregion
 
@@ -24,6 +26,7 @@ namespace Repository.Manager
             _attributeRepository = new Lazy<IAttributeRepository>(() => new AttributeRepository(repositoryContext));
             _attributeValueRepository = new Lazy<IAttributeValueRepository>(() => new AttributeValueRepository(repositoryContext));
             _categoryRepository = new Lazy<ICategoryRepository>(() => new CategoryRepository(repositoryContext));
+            _reviewRepository = new Lazy<IReviewRepository>(() => new ReviewRepository(repositoryContext));
 
         }
         #endregion
@@ -34,6 +37,7 @@ namespace Repository.Manager
         public IAttributeRepository Attribute => _attributeRepository.Value;
         public IAttributeValueRepository AttributeValue => _attributeValueRepository.Value;
         public ICategoryRepository Category => _categoryRepository.Value;
+        public IReviewRepository Review => _reviewRepository.Value;
         public async Task SaveAsync() => await _repositoryContext.SaveChangesAsync();
         #endregion
 

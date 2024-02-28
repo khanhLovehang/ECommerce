@@ -75,7 +75,7 @@ public class Product
     /// <summary>
     /// 0: OutStock, 1: InStock
     /// </summary>
-    [Range(0, 1, ErrorMessage = "Gender is from 0 to 1.")]
+    [Range(0, 1, ErrorMessage = "StockStatus is from 0 to 1.")]
     public int? StockStatus { get; set; }
 
     /// <summary>

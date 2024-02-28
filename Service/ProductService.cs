@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using Contracts;
 using Entities.Models;
 using Entities.Exceptions;
 using Service.Contracts;
-using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
+using Contracts.Manager;
+using Shared.DataTransferObjects.ProductDto;
+using Entities.Exceptions.ProductExceptions;
 
 namespace Service
 {
@@ -92,9 +93,9 @@ namespace Service
             if (ids.Count() != productEntities.Count())
                 throw new CollectionByIdsBadRequestException();
 
-            var companiesToReturn = _mapper.Map<IEnumerable<ProductDto>>(productEntities);
+            var productsToReturn = _mapper.Map<IEnumerable<ProductDto>>(productEntities);
 
-            return companiesToReturn;
+            return productsToReturn;
         }
 
         /// <summary>

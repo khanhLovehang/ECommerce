@@ -11,7 +11,7 @@ public partial class Review
 
     public DateTime ReviewDate { get; set; }
 
-    public string ReviewBy { get; set; } = null!;
+    public string ReviewBy { get; set; }
 
     public Guid ReviewById { get; set; }
 

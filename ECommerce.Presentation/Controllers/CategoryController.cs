@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Service.Contracts;
-using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
 using ECommerce.Presentation.ModelBinders;
 using ECommerce.Presentation.ActionFilters;
+using Service.Contracts.Manager;
+using Shared.DataTransferObjects.CategoryDto;
 
 namespace ECommerce.Presentation.Controllers
 {
@@ -29,11 +29,11 @@ namespace ECommerce.Presentation.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllCategorys([FromQuery] CategoryParameters CategoryParameters)
+        public async Task<IActionResult> GetAllCategorys([FromQuery] CategoryParameters categoryParameters)
         {
-            var Categorys = await _service.CategoryService.GetAllCategorysAsync(CategoryParameters, trackChanges: false);
+            var categorys = await _service.CategoryService.GetAllCategorysAsync(categoryParameters, trackChanges: false);
 
-            return Ok(Categorys);
+            return Ok(categorys);
         }
 
         /// <summary>
@@ -44,21 +44,21 @@ namespace ECommerce.Presentation.Controllers
         [HttpGet("{id:int}", Name = "CategoryById")]
         public async Task<IActionResult> GetCategory(int id)
         {
-            var Category = await _service.CategoryService.GetCategoryAsync(id, trackChanges: false);
+            var category = await _service.CategoryService.GetCategoryAsync(id, trackChanges: false);
 
-            return Ok(Category);
+            return Ok(category);
         }
 
         /// <summary>
         /// Create a Category
         /// </summary>
-        /// <param name="Category"></param>
+        /// <param name="category"></param>
         /// <returns></returns>
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> CreateCategory([FromBody] CategoryForCreationDto Category)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryForCreationDto category)
         {
-            var createdCategory = await _service.CategoryService.CreateCategoryAsync(Category);
+            var createdCategory = await _service.CategoryService.CreateCategoryAsync(category);
 
             return CreatedAtRoute("CategoryById", new { id = createdCategory.CategoryId }, createdCategory);
         }
@@ -71,9 +71,9 @@ namespace ECommerce.Presentation.Controllers
         [HttpGet("collection/({ids})", Name = "CategoryCollection")]
         public async Task<IActionResult> GetCategoryCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<int> ids)
         {
-            var Categorys = await _service.CategoryService.GetByIdsAsync(ids, trackChanges: false);
+            var categories = await _service.CategoryService.GetByIdsAsync(ids, trackChanges: false);
 
-            return Ok(Categorys);
+            return Ok(categories);
         }
 
         /// <summary>
@@ -81,13 +81,13 @@ namespace ECommerce.Presentation.Controllers
         /// </summary>
         /// <param name="CategoryCollection"></param>
         /// <returns></returns>
-        //[HttpPost("collection")]
-        //public async Task <IActionResult> CreateCategoryCollection([FromBody] IEnumerable<CategoryForCreationDto> categoryCollection)
-        //{
-        //    var result = await _service.CategoryService.CreateCategoryCollection(categoryCollection);
+        [HttpPost("collection")]
+        public async Task<IActionResult> CreateCategoryCollection([FromBody] IEnumerable<CategoryForCreationDto> categoryCollection)
+        {
+            var result = await _service.CategoryService.CreateCategoryCollection(categoryCollection);
 
-        //    return CreatedAtRoute("CategoryCollection", new { result.ids }, result.categories);
-        //}
+            return CreatedAtRoute("CategoryCollection", new { result.ids }, result.categories);
+        }
 
         /// <summary>
         /// Delete Category (and its attribute value)
@@ -106,13 +106,13 @@ namespace ECommerce.Presentation.Controllers
         /// Update Category (while insert child resource - attribute value)
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="company"></param>
+        /// <param name="category"></param>
         /// <returns></returns>
         [HttpPut("{id:int}")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryForUpdateDto Category)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryForUpdateDto category)
         {
-            await _service.CategoryService.UpdateCategoryAsync(id, Category, trackChanges: true);
+            await _service.CategoryService.UpdateCategoryAsync(id, category, trackChanges: true);
 
             return NoContent();
         }
