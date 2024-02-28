@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Base;
+using Repository.Context;
 using Repository.Extensions;
 using Shared.RequestFeatures;
 using System.ComponentModel.Design;

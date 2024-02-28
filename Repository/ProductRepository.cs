@@ -1,6 +1,8 @@
 ﻿using Contracts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository.Base;
+using Repository.Context;
 using Shared.RequestFeatures;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 

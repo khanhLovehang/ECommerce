@@ -6,5 +6,6 @@
         IProductService ProductService { get; }
         IAttributeService AttributeService { get; }
         IAttributeValueService AttributeValueService { get; }
+        ICategoryService CategoryService { get; }
     }
 }

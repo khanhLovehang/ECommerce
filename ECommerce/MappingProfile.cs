@@ -28,7 +28,12 @@ namespace ECommerce
             CreateMap<AttributeValue, AttributeValueDto>();
             CreateMap<AttributeValueForCreationDto, AttributeValue>();
             //The ReverseMap method is also going to configure this rule to execute reverse mapping if we ask for it.
-            CreateMap<AttributeValueForUpdateDto, AttributeValue>().ReverseMap(); 
+            CreateMap<AttributeValueForUpdateDto, AttributeValue>().ReverseMap();
+
+            //Category
+            CreateMap<Category, CategoryDto>();
+            CreateMap<CategoryForCreationDto, Category>();
+            CreateMap<CategoryForUpdateDto, Category>();
         }
     }
 }

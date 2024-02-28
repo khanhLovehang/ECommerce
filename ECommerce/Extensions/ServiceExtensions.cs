@@ -3,9 +3,10 @@ using Entities.ErrorModel;
 using LoggerService;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
-using Repository;
-using Service;
+using Repository.Context;
+using Repository.Manager;
 using Service.Contracts;
+using Service.Manager;
 using System.Net;
 
 namespace ECommerce.Extensions

@@ -1,5 +1,7 @@
 ﻿using Contracts;
 using Microsoft.EntityFrameworkCore;
+using Repository.Base;
+using Repository.Context;
 using Shared.RequestFeatures;
 using Attribute = Entities.Models.Attribute;
 

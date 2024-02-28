@@ -20,6 +20,7 @@ namespace Contracts
         IProductRepository Product { get; }
         IAttributeRepository Attribute { get; }
         IAttributeValueRepository AttributeValue { get; }
+        ICategoryRepository Category { get; }
 
         Task SaveAsync();
     }

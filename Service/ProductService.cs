@@ -5,7 +5,6 @@ using Entities.Exceptions;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 using Shared.RequestFeatures;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Service
 {

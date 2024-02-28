@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Attribute = Entities.Models.Attribute;
 
-namespace Repository
+namespace Repository.Context
 {
     public partial class RepositoryContext : DbContext
     {
@@ -15,8 +15,8 @@ namespace Repository
             : base(options)
         {
         }
-        
-        
+
+
         public virtual DbSet<Attribute> Attributes { get; set; }
 
         public virtual DbSet<AttributeValue> AttributeValues { get; set; }

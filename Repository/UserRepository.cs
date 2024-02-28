@@ -1,5 +1,7 @@
 ﻿using Contracts;
 using Entities.Models;
+using Repository.Base;
+using Repository.Context;
 
 namespace Repository
 {
